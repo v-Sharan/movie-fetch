@@ -53,7 +53,6 @@ const App = () => {
   }, []);
 
   const handleAddMovie = async (Movie) => {
-    console.log(Movie);
     try {
       await fetch(
         "https://moviedatabase-c8855-default-rtdb.asia-southeast1.firebasedatabase.app/movie.json",
