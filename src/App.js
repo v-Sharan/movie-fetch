@@ -16,12 +16,15 @@ const App = () => {
   //   });
   // }
 
+  let MoviesData = [];
+
   const fetchData = useCallback(async () => {
     setMovies([]);
     try {
       setLoading(true);
       const data = await fetch(
-        "https://moviedatabase-c8855-default-rtdb.asia-southeast1.firebasedatabase.app/data.json"
+        // GET --> DEFAULT
+        "https://moviedatabase-c8855-default-rtdb.asia-southeast1.firebasedatabase.app/movie.json"
       );
       if (!data.ok) {
         //404
@@ -29,35 +32,34 @@ const App = () => {
       }
       const responeseData = await data.json();
       setLoading(false);
+      console.log(responeseData);
+      for (let key in responeseData) {
+        MoviesData.push({
+          id: key,
+          title: responeseData[key].title, //const data = {name:"Jones"}  --> data.name
+          opening_crawl: responeseData[key].opening_crawl,
+          release_date: responeseData[key].release_date,
+        });
+      }
+
+      setMovies(MoviesData);
     } catch (err) {
       setError(err.message);
     }
   }, []);
-
-  // const fetchData = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       "https://moviefetching-default-rtdb.asia-southeast1.firebasedatabase.app/data.json"
-  //     );
-  //     const data = await response.json();
-  //     console.log(data);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
 
   useEffect(() => {
     fetchData();
   }, []);
 
   const handleAddMovie = async (Movie) => {
+    console.log(Movie);
     try {
-      const response = await fetch(
-        "https://moviefetching-default-rtdb.asia-southeast1.firebasedatabase.app/data.json",
+      await fetch(
+        "https://moviedatabase-c8855-default-rtdb.asia-southeast1.firebasedatabase.app/movie.json",
         { method: "POST", body: JSON.stringify(Movie) }
       );
-      const data = await response.json();
-      console.log(data);
+      console.log("Data added");
     } catch (err) {
       console.log(err);
     }
